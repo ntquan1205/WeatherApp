@@ -9,8 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\cloud.png" />
     <None Remove="Images\explore.png" />
     <None Remove="Images\sun_cloud.png" />
+    <None Remove="Images\water.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,11 +20,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\cloud.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\explore.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\sun_cloud.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\water.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
