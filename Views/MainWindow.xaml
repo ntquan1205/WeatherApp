@@ -4,9 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WeatherApp"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+
+        mc:Ignorable="d" Height="685" Width="995" Background="Transparent"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" FontFamily="Cambria">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Left-->
+
+        <Border CornerRadius="30 0 0 30" Background="#FFFFFF">
+            <StackPanel>
+                <!--TextBox-->
+                <Border BorderBrush="#d9d9d9" BorderThickness="1" CornerRadius="15" HorizontalAlignment="Center" Width="200" Margin="0 35 0 0">
+                    <Grid Margin="7 7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="/Images/explore.png" Height="18" Margin="5 0 0 0"/>
+                        <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="Search ..." Style="{StaticResource textHint}"/>
+                        <TextBox Name="txtSearch" TextChanged="txtSearch_TextChanged" Style="{StaticResource textBox}"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+        </Border>
+
+        <Border Grid.Column="1" CornerRadius="0 30 30 0" MouseDown="Border_MouseDown" Background="#F6F6F6" >
+
+        </Border>
 
     </Grid>
 </Window>

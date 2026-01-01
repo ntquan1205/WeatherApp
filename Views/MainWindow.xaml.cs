@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using WeatherApp.ViewModels;
 
 namespace WeatherApp
@@ -9,6 +10,12 @@ namespace WeatherApp
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+        }
+
+        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }
