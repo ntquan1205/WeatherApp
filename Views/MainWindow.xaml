@@ -150,7 +150,7 @@
                                 <Image Source="/WeatherApp;component/Images/like.png" Width="18" Height="18" Margin="10 0 0 0"/>
                             </StackPanel>
 
-                            <Slider Style="{DynamicResource SliderStyle1}" Value="5.5" Maximum="10" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="90"/>
+        
                         </Grid>
                     </Border>
 
@@ -166,8 +166,6 @@
                                 <TextBlock Text="Average" FontWeight="SemiBold"/>
                                 <Image Source="/WeatherApp;component/Images/happy.png" Width="18" Height="18" Margin="10 0 0 0"/>
                             </StackPanel>
-
-                            <Slider Style="{DynamicResource SliderStyle1}" Value="4" Maximum="10" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="90"/>
                         </Grid>
                     </Border>
 
@@ -183,8 +181,6 @@
                                 <TextBlock Text="Unhealthy" FontWeight="SemiBold"/>
                                 <Image Source="/WeatherApp;component/Images/dislike.png" Width="18" Height="18" Margin="10 0 0 0"/>
                             </StackPanel>
-
-                            <Slider Style="{DynamicResource SliderStyle1}" Value="7" Maximum="10" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="90"/>
                         </Grid>
                     </Border>
 
