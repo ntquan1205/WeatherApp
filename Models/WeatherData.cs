@@ -1,36 +1,157 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace WeatherApp.Models
 {
-    public class WeatherData
+    public class WeatherData : INotifyPropertyChanged
     {
-        public double Temperature { get; set; }
-        public double Humidity { get; set; }
-        public double Pressure { get; set; }
-        public double WindSpeed { get; set; }
-        public string WindDirection { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public DateTime Time { get; set; }
+        private double _temperature;
+        private double _humidity;
+        private double _pressure;
+        private double _windSpeed;
+        private string _windDirection = string.Empty;
+        private string _description = string.Empty;
+        private DateTime _time;
 
-      
-        public ObservableCollection<DailyForecast> DailyForecasts { get; set; } = new();
-        public ObservableCollection<HourlyForecast> HourlyForecasts { get; set; } = new();
+        public double Temperature
+        {
+            get => _temperature;
+            set
+            {
+                _temperature = value;
+                OnPropertyChanged(nameof(Temperature));
+            }
+        }
+
+        public double Humidity
+        {
+            get => _humidity;
+            set
+            {
+                _humidity = value;
+                OnPropertyChanged(nameof(Humidity));
+            }
+        }
+
+        public double Pressure
+        {
+            get => _pressure;
+            set
+            {
+                _pressure = value;
+                OnPropertyChanged(nameof(Pressure));
+            }
+        }
+
+        public double WindSpeed
+        {
+            get => _windSpeed;
+            set
+            {
+                _windSpeed = value;
+                OnPropertyChanged(nameof(WindSpeed));
+            }
+        }
+
+        public string WindDirection
+        {
+            get => _windDirection;
+            set
+            {
+                _windDirection = value;
+                OnPropertyChanged(nameof(WindDirection));
+            }
+        }
+
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                _description = value;
+                OnPropertyChanged(nameof(Description));
+            }
+        }
+
+        public DateTime Time
+        {
+            get => _time;
+            set
+            {
+                _time = value;
+                OnPropertyChanged(nameof(Time));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    public class DailyForecast
+    public class DailyForecast : INotifyPropertyChanged
     {
-        public DateTime Date { get; set; }
-        public double MaxTemperature { get; set; }
-        public double MinTemperature { get; set; }
-        public string WeatherCode { get; set; } = string.Empty;
-    }
+        private string _dayOfWeek = string.Empty;
+        private double _maxTemperature;
+        private double _minTemperature;
+        private string _weatherIcon = string.Empty;
+        private DateTime _date;
 
-    public class HourlyForecast
-    {
-        public DateTime Time { get; set; }
-        public double Temperature { get; set; }
-        public double Humidity { get; set; }
-        public double Pressure { get; set; }
+        public string DayOfWeek
+        {
+            get => _dayOfWeek;
+            set
+            {
+                _dayOfWeek = value;
+                OnPropertyChanged(nameof(DayOfWeek));
+            }
+        }
+
+        public double MaxTemperature
+        {
+            get => _maxTemperature;
+            set
+            {
+                _maxTemperature = value;
+                OnPropertyChanged(nameof(MaxTemperature));
+            }
+        }
+
+        public double MinTemperature
+        {
+            get => _minTemperature;
+            set
+            {
+                _minTemperature = value;
+                OnPropertyChanged(nameof(MinTemperature));
+            }
+        }
+
+        public string WeatherIcon
+        {
+            get => _weatherIcon;
+            set
+            {
+                _weatherIcon = value;
+                OnPropertyChanged(nameof(WeatherIcon));
+            }
+        }
+
+        public DateTime Date
+        {
+            get => _date;
+            set
+            {
+                _date = value;
+                OnPropertyChanged(nameof(Date));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

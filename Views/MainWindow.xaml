@@ -33,17 +33,21 @@
                 </Border>
 
                 <StackPanel Margin="50 60 0 0">
-                    <Image Source="/WeatherApp;component/Images/sun_cloud.png" Width="140" HorizontalAlignment="Left" />
-                    <TextBlock Text="12°c" FontSize="46" Margin="0 20 0 0"/>
-                    <TextBlock Text="Monday, 16:00" FontSize="18" FontWeight="SemiBold" Margin="0 15 0 0"/>
+                    <Image Source="{Binding WeatherIcon}" Width="140" HorizontalAlignment="Left" />
+                    <TextBlock Text="{Binding CurrentWeather.Temperature, StringFormat={}{0}°c}" FontSize="46" Margin="0 20 0 0"/>
+                    <TextBlock Text="{Binding FormattedTime}" FontSize="18" FontWeight="SemiBold" Margin="0 15 0 0"/>
                     <Separator Background="#dadada" Margin="3 30 40 30" Height="0.8"/>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/WeatherApp;component/Images/cloud.png" Width="20" Height="20"/>
-                        <TextBlock Text="Mostly Cloudy" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CurrentWeather.Description}" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 15 0 77">
                         <Image Source="/WeatherApp;component/Images/water.png" Width="20" Height="20"/>
-                        <TextBlock Text="Rain - 30%" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <Binding Path="RainProbability" StringFormat="Rain - {0}%"/>
+                            </TextBlock.Text>
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
 
@@ -53,7 +57,7 @@
                             <ImageBrush ImageSource="/WeatherApp;component/Images/q1.jpg" Stretch="Fill" Opacity="0.65"/>
                         </Border.Background>
 
-                        <TextBlock Text="Vladvostok,Russia " Foreground="#FFFFFF" VerticalAlignment="Center" TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding LocationName}" Foreground="#FFFFFF" VerticalAlignment="Center" TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
                     </Border>
                 </Border>
             </StackPanel>
@@ -71,15 +75,18 @@
                     </StackPanel>
                 </Grid>
 
-                <StackPanel Orientation="Horizontal" Margin="40 20 0 20">
-                    <uc:CardDay Day="Sun" MaxNum="16°" MinNum="3°" Source="/WeatherApp;component/Images/sun.png"/>
-                    <uc:CardDay Day="Mon" MaxNum="15°" MinNum="6°" Source="/WeatherApp;component/Images/sun_cloud.png"/>
-                    <uc:CardDay Day="Tue" MaxNum="1°" MinNum="-10°" Source="/WeatherApp;component/Images/snow.png"/>
-                    <uc:CardDay Day="Wed" MaxNum="7°" MinNum="-1°" Source="/WeatherApp;component/Images/rain.png"/>
-                    <uc:CardDay Day="Thu" MaxNum="14°" MinNum="3°" Source="/WeatherApp;component/Images/rain_cloud.png"/>
-                    <uc:CardDay Day="Fri" MaxNum="26°" MinNum="10°" Source="/WeatherApp;component/Images/sun.png"/>
-                    <uc:CardDay Day="Sat" MaxNum="3°" MinNum="-3°" Source="/WeatherApp;component/Images/storm.png"/>
-                </StackPanel>
+                <ItemsControl ItemsSource="{Binding DailyForecasts}" Margin="40 20 0 20">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <uc:CardDay DataContext="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
                 <TextBlock Text="Today's Highlights" FontSize="16" FontWeight="SemiBold" Margin="40 10 0 10"/>
 
@@ -90,9 +97,9 @@
                         <StackPanel>
                             <TextBlock Text="UV Index" Style="{StaticResource titleText}"/>
 
-                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="4" Maximum="10" Margin="0 12 0 0"/>
-                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="7" Maximum="10" Margin="0 5"/>
-                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="3" Maximum="10"/>
+                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="{Binding UVIndex1}" Maximum="10" Margin="0 12 0 0" IsEnabled="False"/>
+                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="{Binding UVIndex2}" Maximum="10" Margin="0 5" IsEnabled="False"/>
+                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="{Binding UVIndex3}" Maximum="10" IsEnabled="False"/>
                             <TextBlock Text="Average is 5" TextAlignment="Center" FontSize="12" Margin="0 3 0 0" Foreground="#9a9a9a"/>
 
                         </StackPanel>
@@ -104,12 +111,16 @@
                             <TextBlock Text="Wind Status" Style="{StaticResource titleText}"/>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="7.70" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock FontSize="34" FontWeight="SemiBold">
+                                    <TextBlock.Text>
+                                        <Binding Path="CurrentWeather.WindSpeed" StringFormat="{}{0:F2}"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBlock Text="km/h" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                                 <Image Source="/WeatherApp;component/Images/dir.png" Width="25" Height="25" Margin="0 0 10 0"/>
-                                <TextBlock Text="WSW" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CurrentWeather.WindDirection}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -122,16 +133,16 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 25 0 0">
                                 <Image Source="/WeatherApp;component/Images/sunrise.png" Width="40" Height="40" Margin="0 0 10 0"/>
                                 <StackPanel>
-                                    <TextBlock Text="6:35 AM" FontSize="16" FontWeight="SemiBold"/>
-                                    <TextBlock Text="-1m 46s" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
+                                    <TextBlock Text="{Binding SunriseTime}" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding SunriseChange}" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
                                 </StackPanel>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10 0 0">
                                 <Image Source="/WeatherApp;component/Images/sunset.png" Width="40" Height="40" Margin="0 0 10 0"/>
                                 <StackPanel>
-                                    <TextBlock Text="5:12 AM" FontSize="16" FontWeight="SemiBold"/>
-                                    <TextBlock Text="+2m 15s" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
+                                    <TextBlock Text="{Binding SunsetTime}" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding SunsetChange}" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -142,7 +153,11 @@
                         <Grid>
                             <TextBlock Text="Humidity" Style="{StaticResource titleText}"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="56" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock FontSize="34" FontWeight="SemiBold">
+                                    <TextBlock.Text>
+                                        <Binding Path="CurrentWeather.Humidity" StringFormat="{}{0}"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBlock Text="%" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
@@ -159,11 +174,15 @@
                         <Grid>
                             <TextBlock Text="Visibility" Style="{StaticResource titleText}"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="5.2" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock FontSize="34" FontWeight="SemiBold">
+                                    <TextBlock.Text>
+                                        <Binding Path="Visibility" StringFormat="{}{0:F1}"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBlock Text="km" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                                <TextBlock Text="Average" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding VisibilityStatus}" FontWeight="SemiBold"/>
                                 <Image Source="/WeatherApp;component/Images/happy.png" Width="18" Height="18" Margin="10 0 0 0"/>
                             </StackPanel>
                         </Grid>
@@ -174,11 +193,15 @@
                         <Grid>
                             <TextBlock Text="Air Quality" Style="{StaticResource titleText}"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="105" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock FontSize="34" FontWeight="SemiBold">
+                                    <TextBlock.Text>
+                                        <Binding Path="AirQuality" StringFormat="{}{0}"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBlock Text="aqi" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                                <TextBlock Text="Unhealthy" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding AirQualityStatus}" FontWeight="SemiBold"/>
                                 <Image Source="/WeatherApp;component/Images/dislike.png" Width="18" Height="18" Margin="10 0 0 0"/>
                             </StackPanel>
                         </Grid>
