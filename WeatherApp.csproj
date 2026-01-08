@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Images\cloud.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

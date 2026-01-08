@@ -1,10 +1,11 @@
-﻿<Window x:Class="WeatherApp.MainWindow"
+<Window x:Class="WeatherApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:uc="clr-namespace:WeatherApp.UserControls"
         xmlns:local="clr-namespace:WeatherApp"
+        xmlns:views="clr-namespace:WeatherApp.Views"
 
         mc:Ignorable="d" Height="685" Width="995" Background="Transparent"
         WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" FontFamily="Cambria">
@@ -18,23 +19,38 @@
 
         <Border CornerRadius="30 0 0 30" Background="#FFFFFF">
             <StackPanel>
-                <!--TextBox-->
-                <Border BorderBrush="#d9d9d9" BorderThickness="1" CornerRadius="15" HorizontalAlignment="Center" Width="200" Margin="0 35 0 0">
-                    <Grid Margin="7 7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Image Source="pack://application:,,,/Images/explore.png" Height="18" Margin="5 0 0 0"/>
-                        <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="Search ..." Style="{StaticResource textHint}"/>
-                        <TextBox Name="txtSearch" TextChanged="txtSearch_TextChanged" Style="{StaticResource textBox}"/>
-                    </Grid>
+                <!--Navigation Panel-->
+                <Border Background="#F6F6F6" CornerRadius="15" HorizontalAlignment="Center" Width="200" Margin="0 35 0 0" Padding="5">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <!--Home Button-->
+                        <Button Name="btnHome" 
+                              Click="btnHome_Click" 
+                              Style="{StaticResource navButton}"
+                              ToolTip="Home">
+                            <TextBlock Text="🏠" FontSize="20" VerticalAlignment="Center"/>
+                        </Button>
+                        
+                        <!--Settings Button-->
+                        <Button Name="btnSettings" 
+                              Click="btnSettings_Click" 
+                              Style="{StaticResource navButton}"
+                              ToolTip="Settings">
+                            <TextBlock Text="⚙️" FontSize="20" VerticalAlignment="Center"/>
+                        </Button>
+                        
+                        <!--Locations Button-->
+                        <Button Name="btnLocations" 
+                              Click="btnLocations_Click" 
+                              Style="{StaticResource navButton}"
+                              ToolTip="Locations">
+                            <TextBlock Text="📍" FontSize="20" VerticalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
                 </Border>
 
                 <StackPanel Margin="50 60 0 0">
                     <Image Source="{Binding WeatherIcon}" Width="140" HorizontalAlignment="Left" />
-                    <TextBlock Text="{Binding CurrentWeather.Temperature, StringFormat={}{0}°c}" FontSize="46" Margin="0 20 0 0"/>
+                    <TextBlock Text="{Binding DisplayTemperature}" FontSize="46" Margin="0 20 0 0"/>
                     <TextBlock Text="{Binding FormattedTime}" FontSize="18" FontWeight="SemiBold" Margin="0 15 0 0"/>
                     <Separator Background="#dadada" Margin="3 30 40 30" Height="0.8"/>
                     <StackPanel Orientation="Horizontal">
@@ -66,7 +82,8 @@
         <!--Right Side-->
 
         <Border Grid.Column="1" CornerRadius="0 30 30 0" MouseDown="Border_MouseDown" Background="#F6F6F6" >
-            <StackPanel>
+            <ContentControl Name="contentArea">
+                <StackPanel Name="homeContent">
                 <!--Top Menu-->
                 <Grid Margin="40 30 40 10">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -111,12 +128,7 @@
                             <TextBlock Text="Wind Status" Style="{StaticResource titleText}"/>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock FontSize="34" FontWeight="SemiBold">
-                                    <TextBlock.Text>
-                                        <Binding Path="CurrentWeather.WindSpeed" StringFormat="{}{0:F2}"/>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <TextBlock Text="km/h" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
+                                <TextBlock Text="{Binding DisplayWindSpeed}" FontSize="34" FontWeight="SemiBold"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                                 <Image Source="/WeatherApp;component/Images/dir.png" Width="25" Height="25" Margin="0 0 10 0"/>
@@ -211,8 +223,8 @@
 
 
                 </WrapPanel>
-            </StackPanel>
-
+                </StackPanel>
+            </ContentControl>
         </Border>
 
     </Grid>

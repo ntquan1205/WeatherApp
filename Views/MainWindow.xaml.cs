@@ -1,15 +1,46 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Controls;
 using WeatherApp.ViewModels;
+using WeatherApp.Views;
+using WeatherApp.Services;
 
 namespace WeatherApp
 {
     public partial class MainWindow : Window
     {
+        private readonly MainViewModel _mainViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
+        private readonly LocationsViewModel _locationsViewModel;
+        private readonly SettingsPage _settingsPage;
+        private readonly LocationsPage _locationsPage;
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+
+            // Initialize services
+            var weatherService = new MockWeatherService();
+            var geocoderService = new MockGeocoderService();
+            _settingsViewModel = new SettingsViewModel();
+
+            // Initialize ViewModels
+            _mainViewModel = new MainViewModel(weatherService, _settingsViewModel);
+            _locationsViewModel = new LocationsViewModel(geocoderService, _mainViewModel);
+
+            // Initialize pages
+            _settingsPage = new SettingsPage { DataContext = _settingsViewModel };
+            _locationsPage = new LocationsPage { DataContext = _locationsViewModel };
+
+            // Set main ViewModel as DataContext
+            DataContext = _mainViewModel;
+
+            // Set initial content to home
+            contentArea.Content = homeContent;
+            UpdateNavigationButtons(btnHome);
+
+            // Handle navigation events
+            _locationsViewModel.OnNavigateBack += NavigateToHome;
         }
 
         private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -18,17 +49,42 @@ namespace WeatherApp
                 this.DragMove();
         }
 
-        private void textSearch_MouseDown(object sender, MouseButtonEventArgs e)
+        private void btnHome_Click(object sender, RoutedEventArgs e)
         {
-            txtSearch.Focus();
+            NavigateToHome();
         }
 
-        private void txtSearch_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtSearch.Text) && txtSearch.Text.Length > 0)
-                textSearch.Visibility = Visibility.Collapsed;
-            else
-                textSearch.Visibility = Visibility.Visible;
+            contentArea.Content = _settingsPage;
+            UpdateNavigationButtons(btnSettings);
+        }
+
+        private void btnLocations_Click(object sender, RoutedEventArgs e)
+        {
+            contentArea.Content = _locationsPage;
+            UpdateNavigationButtons(btnLocations);
+        }
+
+        private void NavigateToHome()
+        {
+            contentArea.Content = homeContent;
+            UpdateNavigationButtons(btnHome);
+        }
+
+        private void UpdateNavigationButtons(Button activeButton)
+        {
+            // Reset all buttons
+            btnHome.Background = System.Windows.Media.Brushes.Transparent;
+            btnSettings.Background = System.Windows.Media.Brushes.Transparent;
+            btnLocations.Background = System.Windows.Media.Brushes.Transparent;
+
+            // Highlight active button
+            if (activeButton != null)
+            {
+                activeButton.Background = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromArgb(100, 3, 169, 244));
+            }
         }
     }
 }

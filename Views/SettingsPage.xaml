@@ -1,0 +1,76 @@
+<UserControl x:Class="WeatherApp.Views.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WeatherApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="685" d:DesignWidth="995">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Left Side-->
+        <Border CornerRadius="30 0 0 30" Background="#FFFFFF">
+            <StackPanel>
+                <TextBlock Text="Settings" FontSize="28" FontWeight="Bold" Margin="30 50 0 0" Foreground="#333333"/>
+                <TextBlock Text="Customize your weather preferences" FontSize="14" Margin="30 10 0 0" Foreground="#9a9a9a"/>
+            </StackPanel>
+        </Border>
+
+        <!--Right Side-->
+        <Border Grid.Column="1" CornerRadius="0 30 30 0" Background="#F6F6F6">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40 50 40 40">
+                    <!--Temperature Unit Section-->
+                    <Border Background="#FFFFFF" CornerRadius="15" Padding="25" Margin="0 0 0 20">
+                        <StackPanel>
+                            <TextBlock Text="Temperature Unit" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="0 0 0 20"/>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="Celsius (°C)" 
+                                           IsChecked="{Binding IsCelsius}"
+                                           FontSize="16" 
+                                           Foreground="#333333"
+                                           GroupName="TemperatureUnit"
+                                           Padding="15 10"
+                                           Style="{StaticResource RadioButtonStyle}"/>
+                                <RadioButton Content="Fahrenheit (°F)" 
+                                           IsChecked="{Binding IsFahrenheit}"
+                                           FontSize="16" 
+                                           Foreground="#333333"
+                                           GroupName="TemperatureUnit"
+                                           Padding="15 10"
+                                           Style="{StaticResource RadioButtonStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!--Wind Speed Unit Section-->
+                    <Border Background="#FFFFFF" CornerRadius="15" Padding="25" Margin="0 0 0 20">
+                        <StackPanel>
+                            <TextBlock Text="Wind Speed Unit" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="0 0 0 20"/>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="Kilometers per Hour (km/h)" 
+                                           IsChecked="{Binding IsKilometersPerHour}"
+                                           FontSize="16" 
+                                           Foreground="#333333"
+                                           GroupName="WindSpeedUnit"
+                                           Padding="15 10"
+                                           Style="{StaticResource RadioButtonStyle}"/>
+                                <RadioButton Content="Meters per Second (m/s)" 
+                                           IsChecked="{Binding IsMetersPerSecond}"
+                                           FontSize="16" 
+                                           Foreground="#333333"
+                                           GroupName="WindSpeedUnit"
+                                           Padding="15 10"
+                                           Style="{StaticResource RadioButtonStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>
