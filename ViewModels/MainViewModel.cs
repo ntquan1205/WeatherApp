@@ -29,7 +29,6 @@ namespace WeatherApp.ViewModels
             {
                 if (SetField(ref _currentWeather, value))
                 {
-                    // Notify tất cả các trường hiển thị khi dữ liệu thời tiết thay đổi
                     OnPropertyChanged(nameof(DisplayTemperature));
                     OnPropertyChanged(nameof(DisplayPrecipitation));
                     OnPropertyChanged(nameof(DisplayVisibility));

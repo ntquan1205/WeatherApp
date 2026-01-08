@@ -47,7 +47,6 @@ namespace WeatherApp.ViewModels
             AddToFavoritesCommand = new RelayCommand(ExecuteAddToFavorites);
             RemoveFromFavoritesCommand = new RelayCommand(ExecuteRemoveFromFavorites);
 
-            // Initialize with some sample favorite locations
             InitializeSampleFavorites();
         }
 

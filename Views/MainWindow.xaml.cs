@@ -19,27 +19,21 @@ namespace WeatherApp
         {
             InitializeComponent();
 
-            // Initialize services
             var weatherService = new MockWeatherService();
             var geocoderService = new MockGeocoderService();
             _settingsViewModel = new SettingsViewModel();
 
-            // Initialize ViewModels
             _mainViewModel = new MainViewModel(weatherService, _settingsViewModel);
             _locationsViewModel = new LocationsViewModel(geocoderService, _mainViewModel);
 
-            // Initialize pages
             _settingsPage = new SettingsPage { DataContext = _settingsViewModel };
             _locationsPage = new LocationsPage { DataContext = _locationsViewModel };
 
-            // Set main ViewModel as DataContext
             DataContext = _mainViewModel;
 
-            // Set initial content to home
             contentArea.Content = homeContent;
             UpdateNavigationButtons(btnHome);
 
-            // Handle navigation events
             _locationsViewModel.OnNavigateBack += NavigateToHome;
         }
 
@@ -74,12 +68,10 @@ namespace WeatherApp
 
         private void UpdateNavigationButtons(Button activeButton)
         {
-            // Reset all buttons
             btnHome.Background = System.Windows.Media.Brushes.Transparent;
             btnSettings.Background = System.Windows.Media.Brushes.Transparent;
             btnLocations.Background = System.Windows.Media.Brushes.Transparent;
 
-            // Highlight active button
             if (activeButton != null)
             {
                 activeButton.Background = new System.Windows.Media.SolidColorBrush(
