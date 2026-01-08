@@ -13,6 +13,13 @@ namespace WeatherApp.Models
         private string _description = string.Empty;
         private DateTime _time;
 
+        public double Precipitation { get; set; }
+        public DateTime Sunrise { get; set; }
+        public DateTime Sunset { get; set; }
+        public double Visibility { get; set; } 
+        public int AirQuality { get; set; } 
+        public string AirQualityStatus { get; set; }
+
         public double Temperature
         {
             get => _temperature;

@@ -110,19 +110,24 @@
                 <!--Widget Section-->
                 <WrapPanel Margin="40 0 0 0">
                     <!--Widget 1-->
-                    <Border Style="{StaticResource widgetBorder}">
-                        <StackPanel>
-                            <TextBlock Text="UV Index" Style="{StaticResource titleText}"/>
+                        <Border Style="{StaticResource widgetBorder}">
+                            <Grid>
+                                <TextBlock Text="Precipitation" Style="{StaticResource titleText}"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Image Source="/WeatherApp;component/Images/rain.png" Width="30" Height="30" Margin="0 0 10 0" VerticalAlignment="Center"/>
 
-                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="{Binding UVIndex1}" Maximum="10" Margin="0 12 0 0" IsEnabled="False"/>
-                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="{Binding UVIndex2}" Maximum="10" Margin="0 5" IsEnabled="False"/>
-                            <Slider Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="{Binding UVIndex3}" Maximum="10" IsEnabled="False"/>
-                            <TextBlock Text="Average is 5" TextAlignment="Center" FontSize="12" Margin="0 3 0 0" Foreground="#9a9a9a"/>
+                                    <TextBlock FontSize="34" FontWeight="SemiBold" VerticalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <Binding Path="DisplayPrecipitation"/>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
 
-                        </StackPanel>
-                    </Border>
+                                <TextBlock Text="in last 24h" FontSize="12" VerticalAlignment="Bottom" Foreground="#9a9a9a"/>
+                            </Grid>
+                        </Border>
 
-                    <!--Widget 2-->
+                        <!--Widget 2-->
                     <Border Style="{StaticResource widgetBorder}">
                         <Grid>
                             <TextBlock Text="Wind Status" Style="{StaticResource titleText}"/>
@@ -144,19 +149,19 @@
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 25 0 0">
                                 <Image Source="/WeatherApp;component/Images/sunrise.png" Width="40" Height="40" Margin="0 0 10 0"/>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding SunriseTime}" FontSize="16" FontWeight="SemiBold"/>
-                                    <TextBlock Text="{Binding SunriseChange}" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Sunrise" FontSize="12" Foreground="#9a9a9a"/>
+                                        <TextBlock Text="{Binding DisplaySunrise}" FontSize="16" FontWeight="SemiBold"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10 0 0">
                                 <Image Source="/WeatherApp;component/Images/sunset.png" Width="40" Height="40" Margin="0 0 10 0"/>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding SunsetTime}" FontSize="16" FontWeight="SemiBold"/>
-                                    <TextBlock Text="{Binding SunsetChange}" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Sunset" FontSize="12" Foreground="#9a9a9a"/>
+                                        <TextBlock Text="{Binding DisplaySunset}" FontSize="16" FontWeight="SemiBold"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
                         </StackPanel>
                     </Border>
 
@@ -186,12 +191,12 @@
                         <Grid>
                             <TextBlock Text="Visibility" Style="{StaticResource titleText}"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock FontSize="34" FontWeight="SemiBold">
-                                    <TextBlock.Text>
-                                        <Binding Path="Visibility" StringFormat="{}{0:F1}"/>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <TextBlock Text="km" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
+                                    <TextBlock FontSize="34" FontWeight="SemiBold">
+                                        <TextBlock.Text>
+                                            <Binding Path="DisplayVisibility"/>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="km" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                                 <TextBlock Text="{Binding VisibilityStatus}" FontWeight="SemiBold"/>
@@ -204,15 +209,15 @@
                     <Border Style="{StaticResource widgetBorder}">
                         <Grid>
                             <TextBlock Text="Air Quality" Style="{StaticResource titleText}"/>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock FontSize="34" FontWeight="SemiBold">
-                                    <TextBlock.Text>
-                                        <Binding Path="AirQuality" StringFormat="{}{0}"/>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <TextBlock Text="aqi" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock FontSize="34" FontWeight="SemiBold">
+                                        <TextBlock.Text>
+                                            <Binding Path="CurrentWeather.AirQuality" StringFormat="{}{0}"/>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="AQI" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 8"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                                 <TextBlock Text="{Binding AirQualityStatus}" FontWeight="SemiBold"/>
                                 <Image Source="/WeatherApp;component/Images/dislike.png" Width="18" Height="18" Margin="10 0 0 0"/>
                             </StackPanel>

@@ -19,7 +19,13 @@ namespace WeatherApp.Services
                 WindSpeed = _random.Next(0, 15) + _random.NextDouble(),
                 WindDirection = GetRandomDirection(),
                 Description = GetRandomDescription(),
-                Time = DateTime.Now
+                Time = DateTime.Now,
+                Precipitation = _random.NextDouble() * 10, 
+                Visibility = _random.Next(5, 20), 
+                AirQuality = _random.Next(1, 100), 
+                AirQualityStatus = "Good", 
+                Sunrise = DateTime.Now.Date.AddHours(6).AddMinutes(_random.Next(0, 30)), 
+                Sunset = DateTime.Now.Date.AddHours(18).AddMinutes(_random.Next(0, 30)) 
             };
 
             return Task.FromResult(weather);

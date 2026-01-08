@@ -47,19 +47,42 @@
                         </StackPanel>
                     </Border>
 
+                    <Border Background="#FFFFFF" CornerRadius="15" Padding="20" Margin="0 0 0 20">
+                        <StackPanel>
+                            <TextBlock Text="Precipitation Unit" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="0 0 0 20"/>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="Millimeters (mm)" 
+                       IsChecked="{Binding IsMillimeters}"
+                       FontSize="16" 
+                       Foreground="#333333"
+                       GroupName="PrecipitationUnit"
+                       Padding="15 10"
+                       Style="{StaticResource RadioButtonStyle}"/>
+
+                                <RadioButton Content="Inches (in)" 
+                       IsChecked="{Binding IsInches}"
+                       FontSize="16" 
+                       Foreground="#333333"
+                       GroupName="PrecipitationUnit"
+                       Padding="15 10"
+                       Style="{StaticResource RadioButtonStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
                     <!--Wind Speed Unit Section-->
                     <Border Background="#FFFFFF" CornerRadius="15" Padding="25" Margin="0 0 0 20">
                         <StackPanel>
                             <TextBlock Text="Wind Speed Unit" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="0 0 0 20"/>
                             <StackPanel Orientation="Horizontal">
-                                <RadioButton Content="Kilometers per Hour (km/h)" 
+                                <RadioButton Content="Kilometers per Hour" 
                                            IsChecked="{Binding IsKilometersPerHour}"
                                            FontSize="16" 
                                            Foreground="#333333"
                                            GroupName="WindSpeedUnit"
                                            Padding="15 10"
                                            Style="{StaticResource RadioButtonStyle}"/>
-                                <RadioButton Content="Meters per Second (m/s)" 
+                                <RadioButton Content="Meters per Second" 
                                            IsChecked="{Binding IsMetersPerSecond}"
                                            FontSize="16" 
                                            Foreground="#333333"

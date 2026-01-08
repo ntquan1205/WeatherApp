@@ -25,7 +25,18 @@ namespace WeatherApp.ViewModels
         public WeatherData CurrentWeather
         {
             get => _currentWeather;
-            set => SetField(ref _currentWeather, value);
+            set
+            {
+                if (SetField(ref _currentWeather, value))
+                {
+                    // Notify tất cả các trường hiển thị khi dữ liệu thời tiết thay đổi
+                    OnPropertyChanged(nameof(DisplayTemperature));
+                    OnPropertyChanged(nameof(DisplayPrecipitation));
+                    OnPropertyChanged(nameof(DisplayVisibility));
+                    OnPropertyChanged(nameof(DisplaySunrise));
+                    OnPropertyChanged(nameof(DisplaySunset));
+                }
+            }
         }
 
         public ObservableCollection<DailyForecast> DailyForecasts { get; set; } = new();
@@ -37,6 +48,29 @@ namespace WeatherApp.ViewModels
             set => SetField(ref _locationName, value);
         }
 
+        public string DisplayPrecipitation
+        {
+            get
+            {
+                if (CurrentWeather == null) return "0 mm";
+
+                return _settingsViewModel.IsMillimeters
+                    ? $"{CurrentWeather.Precipitation:F1} mm"
+                    : $"{MmToInches(CurrentWeather.Precipitation):F2} \""; 
+            }
+        }
+
+        public string DisplayVisibility
+        {
+            get
+            {
+                if (CurrentWeather == null) return "0 km";
+                return $"{CurrentWeather.Visibility:F1} km";
+            }
+        }
+
+        public string DisplaySunrise => CurrentWeather?.Sunrise.ToString("HH:mm") ?? "--:--";
+        public string DisplaySunset => CurrentWeather?.Sunset.ToString("HH:mm") ?? "--:--";
         public string DisplayTemperature
         {
             get
@@ -169,6 +203,8 @@ namespace WeatherApp.ViewModels
         private double CelsiusToFahrenheit(double celsius) => celsius * 9 / 5 + 32;
         private double KmhToMs(double kmh) => kmh / 3.6;
         private double HpaToMmHg(double hpa) => hpa * 0.750062;
+
+        private double MmToInches(double mm) => mm / 25.4;
 
         public event Action OnNavigateToSettings;
         public event Action OnNavigateToLocations;
