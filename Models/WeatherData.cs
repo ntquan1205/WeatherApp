@@ -12,13 +12,67 @@ namespace WeatherApp.Models
         private string _windDirection = string.Empty;
         private string _description = string.Empty;
         private DateTime _time;
+        private double _precipitation;
+        private DateTime _sunrise;
+        private DateTime _sunset;
+        private double _visibility;
+        private int _airQuality;
+        private string _airQualityStatus;
 
-        public double Precipitation { get; set; }
-        public DateTime Sunrise { get; set; }
-        public DateTime Sunset { get; set; }
-        public double Visibility { get; set; } 
-        public int AirQuality { get; set; } 
-        public string AirQualityStatus { get; set; }
+        public double Precipitation
+        {
+            get => _precipitation;
+            set
+            {
+                _precipitation = value;
+                OnPropertyChanged(nameof(Precipitation));
+            }
+        }
+        public DateTime Sunrise
+        {
+            get => _sunrise;
+            set
+            {
+                _sunrise = value;
+                OnPropertyChanged(nameof(Sunrise));
+            }
+        }
+        public DateTime Sunset
+        {
+            get => _sunset;
+            set
+            {
+                _sunset = value;
+                OnPropertyChanged(nameof(Sunset));
+            }
+        }
+        public double Visibility
+        {
+            get => _visibility;
+            set
+            {
+                _visibility = value;
+                OnPropertyChanged(nameof(Visibility));  
+            }
+        }
+        public int AirQuality
+        {
+            get => _airQuality;
+            set
+            {
+                _airQuality = value;
+                OnPropertyChanged(nameof(AirQuality));
+            }
+        }
+        public string AirQualityStatus
+        {
+            get => _airQualityStatus;
+            set
+            {
+                _airQualityStatus= value;
+                OnPropertyChanged(nameof(AirQualityStatus));
+            }
+        }
 
         public double Temperature
         {

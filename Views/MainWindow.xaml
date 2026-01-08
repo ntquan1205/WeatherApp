@@ -196,8 +196,7 @@
                                             <Binding Path="DisplayVisibility"/>
                                         </TextBlock.Text>
                                     </TextBlock>
-                                    <TextBlock Text="km" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
-                            </StackPanel>
+                                </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                                 <TextBlock Text="{Binding VisibilityStatus}" FontWeight="SemiBold"/>
                                 <Image Source="/WeatherApp;component/Images/happy.png" Width="18" Height="18" Margin="10 0 0 0"/>
