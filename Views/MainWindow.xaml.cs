@@ -19,7 +19,7 @@ namespace WeatherApp
         {
             InitializeComponent();
 
-            var weatherService = new MockWeatherService();
+            var weatherService = new OpenWeatherService();
             var geocoderService = new MockGeocoderService();
             _settingsViewModel = new SettingsViewModel();
 

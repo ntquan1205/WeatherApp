@@ -117,7 +117,7 @@ namespace WeatherApp.ViewModels
 
         public MainViewModel(IWeatherService weatherService, SettingsViewModel settingsViewModel)
         {
-            _weatherService = weatherService;
+            _weatherService = weatherService; 
             _settingsViewModel = settingsViewModel;
             _settingsViewModel.PropertyChanged += Settings_PropertyChanged;
 
@@ -126,7 +126,49 @@ namespace WeatherApp.ViewModels
             NavigateToSettingsCommand = new RelayCommand(NavigateToSettings);
             NavigateToLocationsCommand = new RelayCommand(NavigateToLocations);
 
-            InitializeMockData();
+            LoadDefaultWeather();
+        }
+
+        private async void LoadDefaultWeather()
+        {
+  
+            var weatherService = _weatherService as OpenWeatherService;
+ 
+
+            if (_weatherService != null)
+            {
+                CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(21.0285, 105.8542);
+                var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(21.0285, 105.8542);
+                DailyForecasts.Clear();
+                foreach (var item in forecasts) DailyForecasts.Add(item);
+            }
+        }
+
+
+        private async void ExecuteSearch(object parameter)
+        {
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                var geocoder = new OpenWeatherService();
+                var location = await geocoder.GeocodeAsync(SearchText);
+
+                if (location != null)
+                {
+                    LocationName = $"{location.Name}, {location.Country}";
+
+                    CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(
+                        location.Latitude, location.Longitude);
+
+                    var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(
+                        location.Latitude, location.Longitude);
+
+                    DailyForecasts.Clear();
+                    foreach (var forecast in forecasts)
+                    {
+                        DailyForecasts.Add(forecast);
+                    }
+                }
+            }
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -136,40 +178,6 @@ namespace WeatherApp.ViewModels
             OnPropertyChanged(nameof(DisplayPressure));
         }
 
-        private void InitializeMockData()
-        {
-            var mockService = new MockWeatherService();
-            CurrentWeather = mockService.GetCurrentWeatherAsync("Moscow").Result;
-            DailyForecasts.Clear();
-            var forecasts = mockService.GetWeeklyForecastAsync("Moscow").Result;
-            foreach (var forecast in forecasts)
-            {
-                DailyForecasts.Add(forecast);
-            }
-        }
-
-        private async void ExecuteSearch(object parameter)
-        {
-            if (!string.IsNullOrWhiteSpace(SearchText))
-            {
-                var geocoder = new MockGeocoderService();
-                var location = await geocoder.GeocodeAsync(SearchText);
-
-                LocationName = $"{location.Name}, {location.Country}";
-
-                CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(
-                    location.Latitude, location.Longitude);
-
-                var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(
-                    location.Latitude, location.Longitude);
-
-                DailyForecasts.Clear();
-                foreach (var forecast in forecasts)
-                {
-                    DailyForecasts.Add(forecast);
-                }
-            }
-        }
 
         private async void ExecuteUpdate(object parameter)
         {
