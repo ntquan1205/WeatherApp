@@ -2,7 +2,6 @@
 
 namespace WeatherApp.Models.Api
 {
-    // Cấu trúc cho API Geocoding (Tìm thành phố)
     public class GeoResponse
     {
         public string name { get; set; }
@@ -11,7 +10,6 @@ namespace WeatherApp.Models.Api
         public string country { get; set; }
     }
 
-    // Cấu trúc cho API Weather (Thời tiết hiện tại)
     public class WeatherResponse
     {
         public List<WeatherDescription> weather { get; set; }
@@ -48,8 +46,6 @@ namespace WeatherApp.Models.Api
         public long sunset { get; set; }
         public string country { get; set; }
     }
-
-    // Cấu trúc cho Forecast (Dự báo 5 ngày)
     public class ForecastResponse
     {
         public List<ForecastItem> list { get; set; }

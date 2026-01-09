@@ -86,9 +86,8 @@
                 <StackPanel Name="homeContent">
                 <!--Top Menu-->
                 <Grid Margin="40 30 40 10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <Label Content="Today" Style="{StaticResource textButton}"/>
-                        <Label Content="Week" Style="{StaticResource activeTextButton}" Margin="15 0 0 0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <Label Content="Week" Style="{StaticResource textButton}" Margin="15 0 0 0"/>
                     </StackPanel>
                 </Grid>
 
