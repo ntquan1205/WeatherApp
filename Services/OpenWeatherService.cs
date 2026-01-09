@@ -11,7 +11,7 @@ namespace WeatherApp.Services
 {
     public class OpenWeatherService : IWeatherService, IGeocoderService
     {
-        private const string API_KEY = "de654bfa63689994c449fc63b93ef46a"; 
+        private const string API_KEY = "a877ea4d66f2aff2e1e680d721103980"; 
         private readonly HttpClient _httpClient;
 
         public OpenWeatherService()
