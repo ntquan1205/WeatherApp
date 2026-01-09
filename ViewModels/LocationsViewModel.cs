@@ -18,8 +18,16 @@ namespace WeatherApp.ViewModels
             set => SetField(ref _searchQuery, value);
         }
 
+        private bool _isSearching = false;
+        public bool IsSearching
+        {
+            get => _isSearching;
+            set => SetField(ref _isSearching, value);
+        }
+
         public ObservableCollection<Location> SearchResults { get; set; } = new();
-        public ObservableCollection<Location> FavoriteLocations { get; set; } = new();
+
+        public bool HasSearchResults => SearchResults.Any();
 
         private Location _selectedLocation;
         public Location SelectedLocation
@@ -28,45 +36,38 @@ namespace WeatherApp.ViewModels
             set => SetField(ref _selectedLocation, value);
         }
 
-        public bool HasNoFavorites => FavoriteLocations.Count == 0;
-
         public ICommand SearchCommand { get; }
         public ICommand SelectLocationCommand { get; }
-        public ICommand NavigateBackCommand { get; }
-        public ICommand AddToFavoritesCommand { get; }
-        public ICommand RemoveFromFavoritesCommand { get; }
 
         public LocationsViewModel(IGeocoderService geocoderService, MainViewModel mainViewModel)
         {
             _geocoderService = geocoderService;
             _mainViewModel = mainViewModel;
 
-            SearchCommand = new RelayCommand(ExecuteSearch);
+            SearchCommand = new RelayCommand(async (param) => await ExecuteSearch(param));
             SelectLocationCommand = new RelayCommand(ExecuteSelectLocation);
-            NavigateBackCommand = new RelayCommand(ExecuteNavigateBack);
-            AddToFavoritesCommand = new RelayCommand(ExecuteAddToFavorites);
-            RemoveFromFavoritesCommand = new RelayCommand(ExecuteRemoveFromFavorites);
-
-            InitializeSampleFavorites();
         }
 
-        private void InitializeSampleFavorites()
-        {
-            FavoriteLocations.Add(new Location { Name = "Moscow", Country = "Russia", Latitude = 55.7558, Longitude = 37.6173 });
-            FavoriteLocations.Add(new Location { Name = "London", Country = "United Kingdom", Latitude = 51.5074, Longitude = -0.1278 });
-            FavoriteLocations.Add(new Location { Name = "New York", Country = "United States", Latitude = 40.7128, Longitude = -74.0060 });
-            OnPropertyChanged(nameof(HasNoFavorites));
-        }
-
-        private async void ExecuteSearch(object parameter)
+        private async Task ExecuteSearch(object parameter)
         {
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
-                var results = await _geocoderService.SearchLocationsAsync(SearchQuery);
-                SearchResults.Clear();
-                foreach (var location in results)
+                IsSearching = true;
+                OnPropertyChanged(nameof(HasSearchResults));
+
+                try
                 {
-                    SearchResults.Add(location);
+                    var results = await _geocoderService.SearchLocationsAsync(SearchQuery);
+                    SearchResults.Clear();
+                    foreach (var location in results)
+                    {
+                        SearchResults.Add(location);
+                    }
+                }
+                finally
+                {
+                    IsSearching = false;
+                    OnPropertyChanged(nameof(HasSearchResults));
                 }
             }
         }
@@ -76,31 +77,9 @@ namespace WeatherApp.ViewModels
             if (SelectedLocation != null)
             {
                 _mainViewModel.LocationName = $"{SelectedLocation.Name}, {SelectedLocation.Country}";
-                ExecuteNavigateBack(parameter);
+                _mainViewModel.LoadWeatherForLocation(SelectedLocation);
+                OnNavigateBack?.Invoke();
             }
-        }
-
-        private void ExecuteAddToFavorites(object parameter)
-        {
-            if (parameter is Location location && !FavoriteLocations.Contains(location))
-            {
-                FavoriteLocations.Add(location);
-                OnPropertyChanged(nameof(HasNoFavorites));
-            }
-        }
-
-        private void ExecuteRemoveFromFavorites(object parameter)
-        {
-            if (parameter is Location location)
-            {
-                FavoriteLocations.Remove(location);
-                OnPropertyChanged(nameof(HasNoFavorites));
-            }
-        }
-
-        private void ExecuteNavigateBack(object parameter)
-        {
-            OnNavigateBack?.Invoke();
         }
 
         public event System.Action OnNavigateBack;

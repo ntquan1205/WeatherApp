@@ -207,6 +207,26 @@ namespace WeatherApp.ViewModels
             OnNavigateToLocations?.Invoke();
         }
 
+        public async Task LoadWeatherForLocation(Location location)
+        {
+            if (location != null)
+            {
+                LocationName = $"{location.Name}, {location.Country}";
+
+                CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(
+                    location.Latitude, location.Longitude);
+
+                var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(
+                    location.Latitude, location.Longitude);
+
+                DailyForecasts.Clear();
+                foreach (var forecast in forecasts)
+                {
+                    DailyForecasts.Add(forecast);
+                }
+            }
+        }
+
         private double CelsiusToFahrenheit(double celsius) => celsius * 9 / 5 + 32;
         private double KmhToMs(double kmh) => kmh / 3.6;
         private double HpaToMmHg(double hpa) => hpa * 0.750062;

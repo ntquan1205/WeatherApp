@@ -16,8 +16,8 @@
 
         <Border CornerRadius="30 0 0 30" Background="#FFFFFF">
             <StackPanel>
-                <TextBlock Text="Locations" FontSize="28" FontWeight="Bold" Margin="30 50 0 0" Foreground="#333333"/>
-                <TextBlock Text="Search and manage your favorite places" FontSize="14" Margin="30 10 0 0" Foreground="#9a9a9a" TextWrapping="Wrap"/>
+                <TextBlock Text="Search Location" FontSize="28" FontWeight="Bold" Margin="30 50 0 0" Foreground="#333333"/>
+                <TextBlock Text="Search for a city to see weather" FontSize="14" Margin="30 10 0 0" Foreground="#9a9a9a" TextWrapping="Wrap"/>
             </StackPanel>
         </Border>
 
@@ -44,7 +44,7 @@
                                 <Binding Path="SearchQuery" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                <KeyBinding Command="{Binding SearchCommand}" Key="Enter" />
                             </TextBox.InputBindings>
                         </TextBox>
                     </Grid>
@@ -52,9 +52,14 @@
 
                 <Border Background="#FFFFFF" CornerRadius="15" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Favorite Places" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="0 0 0 15"/>
+                        <TextBlock Text="Search Results" 
+                                   FontSize="20" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#333333" 
+                                   Margin="0 0 0 15"
+                                   Visibility="{Binding HasSearchResults, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                        <ListBox ItemsSource="{Binding FavoriteLocations}"
+                        <ListBox ItemsSource="{Binding SearchResults}"
                                  SelectedItem="{Binding SelectedLocation}"
                                  BorderThickness="0"
                                  Background="Transparent"
@@ -66,69 +71,46 @@
                                             Padding="15" 
                                             Margin="0 0 0 10"
                                             Cursor="Hand"
-                                            MouseLeftButtonDown="FavoriteLocation_MouseLeftButtonDown">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" Foreground="#333333"/>
-                                                <TextBlock Text="{Binding Country}" FontSize="14" Foreground="#9a9a9a" Margin="0 5 0 0"/>
-                                            </StackPanel>
-
-                                            <Button Grid.Column="1" 
-                                                    Content="×" 
-                                                    FontSize="20" 
-                                                    Foreground="#999999"
-                                                    Background="Transparent"
-                                                    BorderThickness="0"
-                                                    Padding="5"
-                                                    Cursor="Hand"
-                                                    Click="RemoveFavorite_Click"
-                                                    Tag="{Binding}">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="Button">
-                                                                    <Border Background="Transparent" Padding="5">
-                                                                        <ContentPresenter/>
-                                                                    </Border>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Foreground" Value="#FF0000"/>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </Grid>
+                                            MouseLeftButtonDown="SearchResult_MouseLeftButtonDown">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="16" 
+                                                       FontWeight="SemiBold" 
+                                                       Foreground="#333333"/>
+                                            <TextBlock Text="{Binding Country}" 
+                                                       FontSize="14" 
+                                                       Foreground="#9a9a9a" 
+                                                       Margin="0 5 0 0"/>
+                                        </StackPanel>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
 
-                        <TextBlock Text="No favorite locations yet.&#x0a;Add locations to see them here." 
+                        <TextBlock Text="Type a city name and press Enter" 
                                    FontSize="14" 
                                    Foreground="#9a9a9a" 
                                    TextAlignment="Center"
                                    Margin="0 20 0 0">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Setter Property="Visibility" Value="Visible"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasNoFavorites}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
+                                        <DataTrigger Binding="{Binding HasSearchResults}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSearching}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+
+                        <ProgressBar IsIndeterminate="True" 
+                                     Height="4" 
+                                     Margin="0 20 0 0"
+                                     Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
