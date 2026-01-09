@@ -230,6 +230,7 @@ namespace WeatherApp.ViewModels
                 {
                     DailyForecasts.Add(forecast);
                 }
+                OnPropertyChanged(nameof(DailyForecasts));
             }
         }
 
