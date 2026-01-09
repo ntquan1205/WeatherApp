@@ -146,7 +146,12 @@ namespace WeatherApp.ViewModels
 
                 DailyForecasts.Clear();
                 foreach (var item in forecasts)
+                {
+                    // THÊM DÒNG NÀY: Set đơn vị ngay khi tạo đối tượng
+                    item.SetTemperatureUnit(_settingsViewModel.TemperatureUnit);
+
                     DailyForecasts.Add(item);
+                }
             }
         }
 
@@ -182,6 +187,14 @@ namespace WeatherApp.ViewModels
             OnPropertyChanged(nameof(DisplayTemperature));
             OnPropertyChanged(nameof(DisplayWindSpeed));
             OnPropertyChanged(nameof(DisplayPressure));
+
+            if (DailyForecasts != null)
+            {
+                foreach (var day in DailyForecasts)
+                {
+                    day.SetTemperatureUnit(_settingsViewModel.TemperatureUnit);
+                }
+            }
         }
 
 

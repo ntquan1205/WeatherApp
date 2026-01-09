@@ -30,11 +30,11 @@
 
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Center">
-                <TextBlock Text="{Binding MaxTemperature, StringFormat={}{0:0}°}" 
+                <TextBlock Text="{Binding DisplayMaxTemperature}" 
                            TextAlignment="Center" 
                            FontWeight="SemiBold" 
                            Margin="0 0 8 0"/>
-                <TextBlock Text="{Binding MinTemperature, StringFormat={}{0:0}°}" 
+                <TextBlock Text="{Binding DisplayMinTemperature}" 
                            TextAlignment="Center" 
                            FontWeight="SemiBold" 
                            Foreground="#7a7a7a"/>

@@ -1,5 +1,4 @@
-﻿// Models/Settings.cs
-using WeatherApp.ViewModels;
+﻿using WeatherApp.ViewModels;
 
 namespace WeatherApp.Models
 {

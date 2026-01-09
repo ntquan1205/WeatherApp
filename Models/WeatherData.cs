@@ -158,7 +158,36 @@ namespace WeatherApp.Models
         private double _minTemperature;
         private string _weatherIcon = string.Empty;
         private DateTime _date;
+        private TemperatureUnit _currentUnit = TemperatureUnit.Celsius;
 
+        public string DisplayMaxTemperature
+        {
+            get
+            {
+                if (_currentUnit == TemperatureUnit.Celsius)
+                    return $"{MaxTemperature:0}°"; 
+                else
+                    return $"{(MaxTemperature * 9 / 5 + 32):0}°"; 
+            }
+        }
+
+        public string DisplayMinTemperature
+        {
+            get
+            {
+                if (_currentUnit == TemperatureUnit.Celsius)
+                    return $"{MinTemperature:0}°";
+                else
+                    return $"{(MinTemperature * 9 / 5 + 32):0}°";
+            }
+        }
+
+        public void SetTemperatureUnit(TemperatureUnit unit)
+        {
+            _currentUnit = unit;
+            OnPropertyChanged(nameof(DisplayMaxTemperature));
+            OnPropertyChanged(nameof(DisplayMinTemperature));
+        }
         public string DayOfWeek
         {
             get => _dayOfWeek;
