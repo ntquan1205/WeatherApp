@@ -40,7 +40,7 @@ namespace WeatherApp.ViewModels
 
         public ObservableCollection<DailyForecast> DailyForecasts { get; set; } = new();
 
-        private string _locationName = "Moscow, Russia";
+        private string _locationName = "Hanoi, Vietnam";
         public string LocationName
         {
             get => _locationName;
@@ -106,7 +106,8 @@ namespace WeatherApp.ViewModels
             }
         }
 
-        public string FormattedTime => CurrentWeather?.Time.ToString("dddd, HH:mm") ?? DateTime.Now.ToString("dddd, HH:mm");
+        public string FormattedTime => CurrentWeather?.Time.ToString("dddd, HH:mm", System.Globalization.CultureInfo.InvariantCulture)
+                               ?? DateTime.Now.ToString("dddd, HH:mm", System.Globalization.CultureInfo.InvariantCulture);
 
         public ICommand SearchCommand { get; }
         public ICommand UpdateCommand { get; }
@@ -133,14 +134,19 @@ namespace WeatherApp.ViewModels
         {
   
             var weatherService = _weatherService as OpenWeatherService;
- 
+
+
+            double hanoiLat = 21.0285;
+            double hanoiLon = 105.8542;
 
             if (_weatherService != null)
             {
-                CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(21.0285, 105.8542);
-                var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(21.0285, 105.8542);
+                CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(hanoiLat, hanoiLon);
+                var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(hanoiLat, hanoiLon);
+
                 DailyForecasts.Clear();
-                foreach (var item in forecasts) DailyForecasts.Add(item);
+                foreach (var item in forecasts)
+                    DailyForecasts.Add(item);
             }
         }
 
