@@ -54,7 +54,11 @@ namespace WeatherApp.Services
             return Task.FromResult(new Location { Name = "Current Location", Latitude = lat, Longitude = lon });
         }
 
-
+        private DateTime ConvertUnixToDateTime(long unixTime, int timezoneOffset)
+        {
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            return dtDateTime.AddSeconds(unixTime + timezoneOffset);
+        }
         public async Task<WeatherData> GetCurrentWeatherByCoordinatesAsync(double lat, double lon)
         {
             string url = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={API_KEY}";
@@ -69,9 +73,9 @@ namespace WeatherApp.Services
                 Pressure = info.main.pressure,
                 WindSpeed = info.wind.speed, 
                 Description = info.weather[0].description,
-                Time = DateTime.Now,
-                Sunrise = ConvertUnixToDateTime(info.sys.sunrise),
-                Sunset = ConvertUnixToDateTime(info.sys.sunset),
+                Time = ConvertUnixToDateTime(info.dt, info.timezone),
+                Sunrise = ConvertUnixToDateTime(info.sys.sunrise, info.timezone),
+                Sunset = ConvertUnixToDateTime(info.sys.sunset, info.timezone),
                 Visibility = info.visibility / 1000.0, 
                 Precipitation = 0 
             };

@@ -18,6 +18,8 @@ namespace WeatherApp.Models.Api
         public SysData sys { get; set; }
         public long dt { get; set; }
         public int visibility { get; set; }
+
+        public int timezone { get; set; }
     }
 
     public class WeatherDescription
