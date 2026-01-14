@@ -88,22 +88,31 @@ namespace WeatherApp.Services
             var json = await _httpClient.GetStringAsync(url);
             var forecastData = JsonConvert.DeserializeObject<ForecastResponse>(json);
 
+            var dailyGroups = forecastData.list
+        .GroupBy(x => DateTime.Parse(x.dt_txt).Date)
+        .Take(5);
+
             var dailyForecasts = new List<DailyForecast>();
 
             var noonForecasts = forecastData.list
                 .Where(x => DateTime.Parse(x.dt_txt).Hour == 12)
-                .Take(5); 
+                .Take(5);
 
-            foreach (var item in noonForecasts)
+            foreach (var group in dailyGroups)
             {
-                var date = ConvertUnixToDateTime(item.dt);
+                var firstItem = group.First();
+                var date = group.Key;
+
                 dailyForecasts.Add(new DailyForecast
                 {
                     Date = date,
                     DayOfWeek = date.DayOfWeek.ToString(),
-                    MaxTemperature = item.main.temp, 
-                    MinTemperature = item.main.temp - 2, 
-                    WeatherIcon = $"http://openweathermap.org/img/w/{item.weather[0].icon}.png" 
+
+                    MaxTemperature = group.Max(x => x.main.temp_max),
+
+                    MinTemperature = group.Min(x => x.main.temp_min),
+
+                    WeatherIcon = $"http://openweathermap.org/img/w/{group.ElementAt(group.Count() / 2).weather[0].icon}.png"
                 });
             }
 
@@ -112,11 +121,5 @@ namespace WeatherApp.Services
 
         public Task<WeatherData> GetCurrentWeatherAsync(string location) => throw new NotImplementedException("Use Coordinates version");
         public Task<List<DailyForecast>> GetWeeklyForecastAsync(string location) => throw new NotImplementedException("Use Coordinates version");
-
-        private DateTime ConvertUnixToDateTime(long unixTime)
-        {
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            return dtDateTime.AddSeconds(unixTime).ToLocalTime();
-        }
     }
 }
