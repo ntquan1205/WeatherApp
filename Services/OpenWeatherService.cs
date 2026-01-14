@@ -88,35 +88,16 @@ namespace WeatherApp.Services
             var json = await _httpClient.GetStringAsync(url);
             var forecastData = JsonConvert.DeserializeObject<ForecastResponse>(json);
 
-            var dailyGroups = forecastData.list
-        .GroupBy(x => DateTime.Parse(x.dt_txt).Date)
-        .Take(5);
-
-            var dailyForecasts = new List<DailyForecast>();
-
-            var noonForecasts = forecastData.list
-                .Where(x => DateTime.Parse(x.dt_txt).Hour == 12)
-                .Take(5);
-
-            foreach (var group in dailyGroups)
+            return forecastData.list.GroupBy(x => DateTime.Parse(x.dt_txt).Date).Select(group => new DailyForecast
             {
-                var firstItem = group.First();
-                var date = group.Key;
-
-                dailyForecasts.Add(new DailyForecast
-                {
-                    Date = date,
-                    DayOfWeek = date.DayOfWeek.ToString(),
-
-                    MaxTemperature = group.Max(x => x.main.temp_max),
-
-                    MinTemperature = group.Min(x => x.main.temp_min),
-
-                    WeatherIcon = $"http://openweathermap.org/img/w/{group.ElementAt(group.Count() / 2).weather[0].icon}.png"
-                });
-            }
-
-            return dailyForecasts;
+                Date = group.Key,
+                DayOfWeek = group.Key.DayOfWeek.ToString(),
+                MaxTemperature = group.Max(x => x.main.temp_max),
+                MinTemperature = group.Min(x => x.main.temp_min),
+                WeatherIcon = $"http://openweathermap.org/img/w/{group.First().weather[0].icon}.png"
+            })
+            .Take(5)
+            .ToList();
         }
 
         public Task<WeatherData> GetCurrentWeatherAsync(string location) => throw new NotImplementedException("Use Coordinates version");

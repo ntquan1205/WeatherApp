@@ -228,22 +228,35 @@ namespace WeatherApp.ViewModels
 
         public async Task LoadWeatherForLocation(Location location)
         {
-            if (location != null)
+            if (location == null) return;
+
+            LocationName = $"{location.Name}, {location.Country}";
+
+            var currentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(location.Latitude, location.Longitude);
+            CurrentWeather = currentWeather;
+
+            var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(location.Latitude, location.Longitude);
+
+            if (forecasts != null && forecasts.Count > 0)
             {
-                LocationName = $"{location.Name}, {location.Country}";
+                var todayForecast = forecasts.FirstOrDefault(f => f.Date.Date == DateTime.Today);
+                if (todayForecast != null && CurrentWeather != null)
+                {
 
-                CurrentWeather = await _weatherService.GetCurrentWeatherByCoordinatesAsync(
-                    location.Latitude, location.Longitude);
+                    if (CurrentWeather.Temperature > todayForecast.MaxTemperature)
+                        todayForecast.MaxTemperature = CurrentWeather.Temperature;
 
-                var forecasts = await _weatherService.GetWeeklyForecastByCoordinatesAsync(
-                    location.Latitude, location.Longitude);
+                    if (CurrentWeather.Temperature < todayForecast.MinTemperature)
+                        todayForecast.MinTemperature = CurrentWeather.Temperature;
+                }
+
 
                 DailyForecasts.Clear();
                 foreach (var forecast in forecasts)
                 {
+                    forecast.SetTemperatureUnit(_settingsViewModel.TemperatureUnit);
                     DailyForecasts.Add(forecast);
                 }
-                OnPropertyChanged(nameof(DailyForecasts));
             }
         }
 
